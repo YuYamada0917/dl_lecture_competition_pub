@@ -9,6 +9,7 @@ from tqdm import tqdm
 from src.datasets import ThingsMEGDataset
 from src.models import WavenetClassifier
 from src.utils import set_seed
+import json
 
 def train_and_evaluate(model, train_loader, val_loader, device, epochs=10):
     criterion = nn.CrossEntropyLoss()
@@ -46,7 +47,7 @@ def grid_search(param_grid, data_dir, device):
     results = []
     
     for params in tqdm(ParameterGrid(param_grid), desc="Grid Search"):
-        set_seed(42)  # 再現性のため
+        set_seed(42)
         
         train_set = ThingsMEGDataset("train", data_dir, preprocess=True, 
                                      original_rate=params['original_rate'],
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     data_dir = "data"
     
     param_grid = {
-        'original_rate': [1000],  # 通常、これは固定値です
+        'original_rate': [1000],
         'target_rate': [250, 500],
         'low': [0.5, 1.0, 2.0],
         'high': [40.0, 100.0, 200.0],
@@ -92,7 +93,6 @@ if __name__ == "__main__":
     
     results = grid_search(param_grid, data_dir, device)
     
-    # 結果をソートして最良のパラメータを表示
     best_result = max(results, key=lambda x: x['val_acc'])
     print("\nBest parameters:")
     for key, value in best_result.items():
@@ -100,7 +100,6 @@ if __name__ == "__main__":
             print(f"{key}: {value}")
     print(f"Validation accuracy: {best_result['val_acc']:.4f}")
     
-    # 結果をファイルに保存
-    import json
+
     with open('grid_search_results.json', 'w') as f:
         json.dump(results, f)

@@ -35,7 +35,6 @@ def run(cfg: DictConfig):
         n_layers=cfg.wavenet_layers, n_blocks=cfg.wavenet_blocks, kernel_size=cfg.wavenet_kernel_size
     ).to(cfg.device)
     
-    # モデルの重みをロード
     model.load_state_dict(torch.load(cfg.model_path, map_location=cfg.device))
 
     # ------------------

@@ -44,7 +44,6 @@ class ThingsMEGDataset(torch.utils.data.Dataset):
         return self.X.shape[2]
 
     def preprocess_data(self, X, original_rate, target_rate, low, high):
-        # Convert to numpy for preprocessing
         X_np = X.numpy()
 
         # 1. Resampling
@@ -62,7 +61,6 @@ class ThingsMEGDataset(torch.utils.data.Dataset):
             X_filtered = X_resampled
 
         # 3. Baseline correction
-        # Assuming first 100 ms as baseline
         baseline_samples = int(0.1 * target_rate)
         baseline = X_filtered[:, :, :baseline_samples].mean(axis=2, keepdims=True)
         X_baseline_corrected = X_filtered - baseline
@@ -73,7 +71,6 @@ class ThingsMEGDataset(torch.utils.data.Dataset):
         for i in range(X_baseline_corrected.shape[0]):
             X_scaled[i] = scaler.fit_transform(X_baseline_corrected[i].T).T
 
-        # Convert back to torch tensor
         X_preprocessed = torch.from_numpy(X_scaled).float()
 
         return X_preprocessed

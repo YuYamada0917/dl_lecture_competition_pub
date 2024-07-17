@@ -1,6 +1,9 @@
-batch_size: 128
-epochs: 80
-lr: 0.001
+batch_size: 256
+epochs: 50
+lr: 0.0002
+dropout: 0.3
+weight_decay: 0.0005
+
 
 device: cuda:0
 num_workers: 4
@@ -9,5 +12,21 @@ use_wandb: False
 
 data_dir: data
 
+# Preprocessing parameters
+original_rate: 1000
+target_rate: 500
+low: 0.5
+high: 40.0
+
+# Wavenet parameters
+wavenet_layers: 10
+wavenet_blocks: 5
+wavenet_kernel_size: 5
+
+# Pretraining parameters
+pretrain_epochs: 50
+pretrain_lr: 0.001
+pretrained_model_path: "pretrained_wavenet_encoder.pth"
+
 # Evaluation
-model_path: 
+model_path:
